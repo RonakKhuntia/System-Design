@@ -92,7 +92,7 @@ public class ParkingLot {
         for (ParkingFloor floor : floors.values()) {
             System.out.println("Floor: Floor" + floor.getId());
             for (ParkingSpot spot : floor.getSpots().values()) {
-                System.out.println("Spot: " + spot.getId() + " [" + spot.getAllowedType() + "] " + " - " + spot.isOccupied());
+                System.out.println("Spot: " + spot.getId() + " [" + spot.getAllowedType() + "] " + " - " + (spot.isOccupied() ? " Occupied" : "Unoccupied"));
             }
         }
     }

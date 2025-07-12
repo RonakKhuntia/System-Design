@@ -14,7 +14,7 @@ public class Main {
         EntryGate entryGate = new EntryGate("EG1");
         ExitGate exitGate = new ExitGate("XG1");
 
-        lot.setPricingStrategy(PricingStrategyFactory.get(PricingStrategyType.valueOf("EVENT_BASED")));
+        lot.setPricingStrategy(PricingStrategyFactory.get(PricingStrategyType.valueOf("TIME_BASED")));
 
         ParkingFloor floor1 = new ParkingFloor("Floor1");
         floor1.addSpot(new ParkingSpot("F1S1", VehicleType.BIKE));
@@ -27,7 +27,7 @@ public class Main {
 
         Vehicle car = VehicleFactory.create("KA01AB1234", VehicleType.CAR);
 
-        LocalDateTime entryTime = LocalDateTime.now();
+        LocalDateTime entryTime = LocalDateTime.of(2025, 7, 12, 10, 0); // 10:00 AM
         Ticket ticket = entryGate.parkVehicle(car, entryTime);
 
         System.out.println("----------------------------------------");
@@ -36,10 +36,12 @@ public class Main {
 
         System.out.println("----------------------------------------");
 
-        LocalDateTime exitTime = LocalDateTime.now();
+        LocalDateTime exitTime = LocalDateTime.of(2025, 7, 12, 10, 55); // 10:55 AM
         exitGate.unparkVehicle(ticket.getTicketId(), exitTime, PaymentMode.CARD);
 
         System.out.println("----------------------------------------");
+
+        lot.printStatus();
 
 //        Vehicle bike1 = VehicleFactory.create("KA01AB1234", VehicleType.BIKE);
 //        Vehicle bike2 = VehicleFactory.create("KA01AB5678", VehicleType.BIKE);

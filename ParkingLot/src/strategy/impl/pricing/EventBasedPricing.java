@@ -17,9 +17,10 @@ public class EventBasedPricing implements PricingStrategy {
     @Override
     public double calculateFee(VehicleType type, LocalDateTime entryTime, LocalDateTime exitTime) {
         long durationMinutes = Duration.between(entryTime, exitTime).toMinutes();
-        long hours = (long) Math.ceil(durationMinutes / 60);
+        long hours = (long) Math.ceil((double) durationMinutes / 60);
 
         double ratePerHour = EVENT_HOURLY_RATES.getOrDefault(type, 0.0);
         return ratePerHour * hours;
     }
+
 }

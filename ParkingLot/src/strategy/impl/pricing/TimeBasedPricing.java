@@ -6,7 +6,6 @@ import strategy.PricingStrategy;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 
 public class TimeBasedPricing implements PricingStrategy {
     private static final LocalTime PEAK_START = LocalTime.of(8, 0);
@@ -19,24 +18,23 @@ public class TimeBasedPricing implements PricingStrategy {
     @Override
     public double calculateFee(VehicleType type, LocalDateTime entryTime, LocalDateTime exitTime) {
         if (exitTime.isBefore(entryTime)) {
-            throw new IllegalArgumentException("ExitTime is after EntryTime");
+            throw new IllegalArgumentException("ExitTime is before EntryTime");
         }
 
         long durationMinutes = Duration.between(entryTime, exitTime).toMinutes();
-        long totalHours = (long) Math.ceil(durationMinutes / 60);
+        long totalHours = (long) Math.ceil((double) durationMinutes / 60);
 
         int peakHours = 0;
         int nonPeakHours = 0;
 
-        LocalDateTime cursor = entryTime.truncatedTo(ChronoUnit.HOURS);
+        LocalDateTime currentHour = entryTime;
         for (int i = 0; i < totalHours; i++) {
-            LocalTime hourStart = cursor.toLocalTime();
-            if (isPeak(hourStart)) {
+            if (isPeak(currentHour.toLocalTime())) {
                 peakHours++;
             } else {
                 nonPeakHours++;
             }
-            cursor = cursor.plusHours(1);
+            currentHour = currentHour.plusHours(1);
         }
 
         double peakRate = switch (type) {
