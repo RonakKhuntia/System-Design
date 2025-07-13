@@ -1,5 +1,7 @@
 package model;
 
+import enums.ObstacleType;
+
 import java.util.Queue;
 
 public class Board {
@@ -85,12 +87,23 @@ public class Board {
     }
 
     public void printBoard(Queue<Player> players) {
+        Player player = players.peek();
+        int playerPosition = player.getPosition();
         System.out.println("\nCurrent Board State: ");
         for (int i = 0; i < sideLength; i++) {
             for (int j = 0; j < sideLength; j++) {
+                Cell cell = grid[i][j];
+                Obstacle obstacle = cell.getObstacle();
+                ObstacleType obstacleType = obstacle == null ? null : obstacle.getObstacleType();
                 int position = grid[i][j].getPosition();
                 String cellContent = String.valueOf(position);
-                System.out.print(cellContent + " ");
+                if (obstacleType != null) {
+                    System.out.print("" + obstacleType.name().charAt(0) + obstacle.getDest() + " ");
+                } else if (j == playerPosition) {
+                    System.out.print(player.getName() + " ");
+                } else {
+                    System.out.print(cellContent + " ");
+                }
             }
             System.out.println();
         }
